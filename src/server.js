@@ -26,9 +26,12 @@ const server = http.createServer(app);
 
 const io = new Server(server, { transports: ["websocket", "polling"], cors: corsOptions });
 io.on("connection", socket => {
-
+  socket.on("send-changes", delta => {
+    socket.broadcast.emit("receive-changes", delta)
+  })
+   console.log("socket connected")
 })
-server.listen(PORT, () => {
+server.listen(3001, () => {
     console.log(`server running well :] on port ${PORT}`);
     console.table(listEndpoints(app));
   });
