@@ -26,9 +26,15 @@ const server = http.createServer(app);
 
 const io = new Server(server, { transports: ["websocket", "polling"], cors: corsOptions });
 io.on("connection", socket => {
-  socket.on("send-changes", delta => {
-    socket.broadcast.emit("receive-changes", delta)
+  socket.on("get-document", documentId => {
+    const data = ""
+    socket.join(documentId)
+    socket.emit("load-document", data)
+     socket.on("send-changes", delta => {
+    socket.broadcast.to(documentId).emit("receive-changes", delta)
   })
+  })
+ 
    console.log("socket connected")
 })
 server.listen(3001, () => {
