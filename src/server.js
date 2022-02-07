@@ -3,6 +3,7 @@ import cors from "cors";
 import http from "http";
 import listEndpoints from "express-list-endpoints";
 import { Server } from "socket.io";
+import  mongoose  from "mongoose";
 
 const app = express();
 const whiteList = ["http://localhost:3000" ];
@@ -34,10 +35,16 @@ io.on("connection", socket => {
     socket.broadcast.to(documentId).emit("receive-changes", delta)
   })
   })
- 
    console.log("socket connected")
 })
-server.listen(3001, () => {
+
+mongoose.connect(process.env.MONGO_URL)
+console.log(process.env.MONGO_URL)
+
+mongoose.connection.on("connected", () => {
+  console.log("connected with MONGO");
+  server.listen(PORT, () => {
     console.log(`server running well :] on port ${PORT}`);
     console.table(listEndpoints(app));
   });
+});
