@@ -39,7 +39,6 @@ io.on("connection", socket => {
 })
 
 mongoose.connect(process.env.MONGO_URL)
-console.log(process.env.MONGO_URL)
 
 mongoose.connection.on("connected", () => {
   console.log("connected with MONGO");
