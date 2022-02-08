@@ -4,6 +4,7 @@ import http from "http";
 import listEndpoints from "express-list-endpoints";
 import { Server } from "socket.io";
 import  mongoose  from "mongoose";
+import document from "./schema/document.js"
 
 const app = express();
 const whiteList = ["http://localhost:3000" ];
@@ -27,16 +28,26 @@ const server = http.createServer(app);
 
 const io = new Server(server, { transports: ["websocket", "polling"], cors: corsOptions });
 io.on("connection", socket => {
-  socket.on("get-document", documentId => {
-    const data = ""
+  socket.on("get-document", async documentId => {
+    const document = await findOrCreateDocument(documentId)
     socket.join(documentId)
-    socket.emit("load-document", data)
+    socket.emit("load-document", document)
      socket.on("send-changes", delta => {
     socket.broadcast.to(documentId).emit("receive-changes", delta)
   })
   })
+  socket.on("save-document", async data =>{
+   await document.findByIdAndUpdate(documentId, {data})
+  })
    console.log("socket connected")
 })
+
+async function findOrCreateDocument(id) {
+  if (id = null) return
+  const document = await document.findById(id)
+  if (document) return document
+   return await document.create({document: defaultValue})
+}
 
 mongoose.connect(process.env.MONGO_URL)
 
