@@ -47,7 +47,7 @@ async function findOrCreateDocument(id) {
   if (id = null) return
   const thisDocument = await document.findById(id)
   if (thisDocument) return thisDocument
-   return await document.create({document: defaultValue})
+   return await document.create({document})
 }
 
 mongoose.connect(process.env.MONGO_URL)
