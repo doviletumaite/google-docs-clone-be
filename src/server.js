@@ -35,17 +35,18 @@ io.on("connection", socket => {
      socket.on("send-changes", delta => {
     socket.broadcast.to(documentId).emit("receive-changes", delta)
   })
-  })
-  socket.on("save-document", async data =>{
+   socket.on("save-document", async data =>{
    await document.findByIdAndUpdate(documentId, {data})
   })
+  })
+ 
    console.log("socket connected")
 })
 
 async function findOrCreateDocument(id) {
   if (id = null) return
-  const document = await document.findById(id)
-  if (document) return document
+  const thisDocument = await document.findById(id)
+  if (thisDocument) return thisDocument
    return await document.create({document: defaultValue})
 }
 
