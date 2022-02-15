@@ -31,6 +31,7 @@ app.use("/user", userRouter)
 app.use("/document", documentRouter)
 
 const io = new Server(server, { transports: ["websocket", "polling"], cors: corsOptions });
+
 io.on("connection", socket => {
   socket.on("get-document", async documentId => {
     const document = await findOrCreateDocument(documentId)
@@ -43,7 +44,6 @@ io.on("connection", socket => {
    await document.findByIdAndUpdate(documentId, {data})
   })
   })
- 
    console.log("socket connected")
 })
 
