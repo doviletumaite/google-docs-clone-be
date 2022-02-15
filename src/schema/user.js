@@ -5,7 +5,7 @@ const {Schema, model} = mongoose
 
 const userSchema = new Schema(
     {
-    name: {type: String,  
+    name: {type: String},  
     },
     {
         timestamps: true
