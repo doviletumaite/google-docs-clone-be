@@ -5,6 +5,8 @@ import listEndpoints from "express-list-endpoints";
 import { Server } from "socket.io";
 import  mongoose  from "mongoose";
 import document from "./schema/document.js"
+import userRouter from "./routers/userRouter.js";
+import documentRouter from "./routers/documentRouter.js";
 
 const app = express();
 const whiteList = ["http://localhost:3000" ];
@@ -25,6 +27,8 @@ app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT;
 const server = http.createServer(app);
+app.use("/user", userRouter)
+app.use("/document", documentRouter)
 
 const io = new Server(server, { transports: ["websocket", "polling"], cors: corsOptions });
 io.on("connection", socket => {
